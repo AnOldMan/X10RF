@@ -1,0 +1,25 @@
+|    Byte 1     |    Byte 2     |
+|X|X|X|X|0|X|0|0|X|X|X|X|X|0|0|0|
+|1 2 3 4 5 6 7 8|1 2 3 4 5 6 7 8|
+
+Byte 1
+1: One for house codes E-L
+2: One for house codes A-D & I-L
+3: One for house codes A,B,G,H,I,J,O,P
+4: One for house codes B,D,F,H,J,L,N,P
+5: Always zero
+6: One for units 9-16
+7: Always zero
+8: Always zero
+
+Byte 2
+1: One for BRIGHT or DIM
+2: One for unit codes 5-8 & 13-16
+3: One for OFF (Zero for ON or BRIGHT/DIM)
+4: One for unit codes 2,4,6,8,10,12,14,16 & DIM command
+5: One for unit codes 3,4,7,8,11,12,15,16 & BRIGHT & DIM commands
+6: Always zero
+7: Always zero
+8: Always zero
+
+Obviously the house and unit codes are a form of binary code, but bit 1 of byte one showing a 1 for E-L is strange.  It appears very similar to a binary gray code, which makes sense in that code wheels for the selector switches are easy to make (and easier to read without transistion problems) in gray code than binary.  Note that Bright and Dim commands do NOT have a unit code - They apply to the last unit that received an x-10 signal.

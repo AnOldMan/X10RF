@@ -1,0 +1,16 @@
+
+X-10 RF Protocol
+
+Except for the difference in carrier frequencies and minor differences in timing, the protocol that X-10 uses for RF devices is identical to the NEC IR protocol which is widely used for IR remote controls. An IR data envelope similar to a standard X-10 RF code is pictured below.
+
+The datasheet for the NEC �PD6121 chip which generates NEC codes has a more detailed explanation of the NEC protocol. (NEC designed the chip for IR, X-10 used it in the KC674 keychain remote for RF.) Because 256 Address (NEC calls these CUSTOM) codes were insufficient to identify all of the AV manufacturers, NEC defined the protocol such that all, any or no bits of the second byte can be used to complement corresponding bits in the first byte. This allows for 65536 ADDRESS codes and 256 DATA codes. X-10 uses only a tiny subset of the possible 16,777,216 unique codes. By pairing different bytes for complementary error checking, the basic protocol can accommodate even more codes.
+
+Each code starts with a ~9ms burst of carrier followed by a 4.5ms silence. This leader is necessary to set the ACG in the receivers which dynamically adapt to signal strength. After the leader, there are 32 bits with binary 1 represented by 2.25ms between rising edges and binary 0 represented by 1.125ms between rising edges. The rising edge of the 33rd and final pulse marks the end of the last bit and is followed by a silence of approximately 40ms. The X-10 RF timings are slightly different from the IR timings, with an initial 8.8ms burst followed by a 4.4ms silence, with 2.2ms for binary 1, and 1.1ms for binary 0. Most X-10 RF transmitters send a minimum of five copies of the code separated by 40ms silences although some can send singles.
+
+Instead of device and data bytes, X-10 sends two bytes of data with each byte followed immediately by its bitwise complement for error checking. Within each byte, bit7 is received first and bit0 last. In the pictured code, in the order received, the first byte is 0011 0111, the second is 1100 1000, the third is 0001 1010, and the fourth is 1110 0101. After reversing the bit orders and testing for bitwise complementarity, the two data bytes are 1110 1100 and 0101 1000 or 0xEC and 0x58. Since the illustration was taken from an explanation of IR codes, these represent a device and button for an IR code. If these were X-10 RF codes the bytes would be two data bytes as detailed in the CM17A protocol.
+
+The overall time to send one code, including the approximate 40ms silence, is about 108ms. Timings will vary from one transmitter to another but are repeatable for a specific transmitter. We have seen a range from 95ms to 116ms for various transmitters. The only thing that matters is the time between rising edges - the width of pulses and spaces is immaterial.
+
+X-10 security transmitters use a similar protocol but only one nybble of the first two bytes are bitwise complementary while the last two bytes follow the same pattern as standard X-10 RF codes. Stanley HomeLink garage door sensors use the security protocol and send eleven copies of each code with no silence between codes.
+
+In North America, the X-10 RF carrier frequency is 310MHz. Outside North America it is 433.92MHz. 
